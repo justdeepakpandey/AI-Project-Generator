@@ -1,45 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Project Generator</title>
-
+    <title>ProjectForge AI</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>AI Project Generator</h1>
-        <p class="subtitle">
-            Generate complete software project ideas using Gemini AI.
+    <!--  NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            ProjectForge AI
+        </div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Saved Projects</a></li>
+            <li><a href="#">About</a></li>
+            <li>
+                <button class="login-btn">
+                    Login
+                </button>
+            </li>
+        </ul>
+    </nav>
+    <!--  HERO  -->
+
+    <section class="hero">
+
+        <h1>
+
+            Generate AI Powered Software Projects
+
+        </h1>
+
+        <p>
+
+            Get complete project ideas according to your programming
+            language, experience and skills using Google Gemini.
         </p>
-        <div class="card">
-            <input
-                type="text"
-                placeholder="Enter your skills (Java, React, SQL...)"
-            >
-            <select>
+
+    </section>
+
+    <!--  MAIN -->
+
+    <section class="main-section">
+        <!-- LEFT CARD -->
+        <div class="form-card">
+            <h2>
+                Generate Project
+            </h2>
+            <label>
+    Programming Language
+            </label>
+            <select id="language">
+                <option value="">Select Language</option>
+                <option>Java</option>
+                <option>Python</option>
+                <option>JavaScript</option>
+                <option>C++</option>
+                <option>C#</option>
+            </select>
+            <label>
+                Experience
+            </label>
+            <select id="experience">
+                <option value="">Select Experience</option>
                 <option>Beginner</option>
                 <option>Intermediate</option>
                 <option>Advanced</option>
             </select>
-            <select>
-                <option>Web Development</option>
-                <option>Android</option>
-                <option>AI / ML</option>
-                <option>Full Stack</option>
+            <label>
+                Difficulty
+            </label>
+            <select id="difficulty">
+                <option value="">Select Difficulty</option>
+                <option>Easy</option>
+                <option>Medium</option>
+                <option>Hard</option>
             </select>
-            <button>
+            <label>
+                Skills
+            </label>
+            <input
+                type="text"
+                id="skills"
+                placeholder="Example : Java, React, MySQL, JWT"
+            >
+            <button class="generate-btn">
+
                 Generate Project
+
             </button>
         </div>
-        <div class="result">
-            <h2>Generated Project</h2>
-            <p>
-                Your AI generated project will appear here.
-            </p>
+        <!-- RIGHT CARD -->
+        <div class="result-card">
+            <h2>
+                Generated Project
+            </h2>
+            <div class="empty-state">
+                <h3>
+                    No Project Generated
+                </h3>
+                <p>
+                    Fill the form and click
+                    <b>Generate Project</b>
+                </p>
+            </div>
+
+            <div id="project-result">
+            </div>
         </div>
-    </div>
-<script src="script.js"></script>
+    </section>
+    <!-- FOOTER -->
+
+    <footer>
+
+        Built with ❤️ HTML • CSS • JavaScript • Node.js • Express • MySQL • Gemini AI
+
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
