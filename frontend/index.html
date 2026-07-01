@@ -5,126 +5,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjectForge AI</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
 
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 </head>
+
 <body>
-    <!--  NAVBAR -->
+
+    <!-- Navbar -->
+
     <nav class="navbar">
+
         <div class="logo">
+
             ProjectForge AI
+
         </div>
+
         <ul>
+
             <li><a href="#">Home</a></li>
+
             <li><a href="#">Saved Projects</a></li>
+
             <li><a href="#">About</a></li>
+
             <li>
+
                 <button class="login-btn">
+
                     Login
+
                 </button>
+
             </li>
+
         </ul>
+
     </nav>
-    <!--  HERO  -->
+
+
+
+    <!-- Hero -->
 
     <section class="hero">
 
         <h1>
 
-            Generate AI Powered Software Projects
+            Generate AI Powered Software Project Ideas
 
         </h1>
 
         <p>
 
-            Get complete project ideas according to your programming
-            language, experience and skills using Google Gemini.
+            Enter your language, experience and skills to generate complete
+            software project ideas with Gemini AI.
+
         </p>
 
     </section>
 
-    <!--  MAIN -->
 
-    <section class="main-section">
-        <!-- LEFT CARD -->
-        <div class="form-card">
+
+    <!-- Main -->
+
+    <section class="container">
+
+
+
+        <!-- Left -->
+
+        <div class="left-card">
+
             <h2>
+
                 Generate Project
+
             </h2>
+
+
+
             <label>
-    Programming Language
+
+                Programming Language
+
             </label>
+
             <select id="language">
+
                 <option value="">Select Language</option>
+
                 <option>Java</option>
+
                 <option>Python</option>
+
                 <option>JavaScript</option>
+
                 <option>C++</option>
+
                 <option>C#</option>
+
             </select>
+
+
+
             <label>
+
                 Experience
+
             </label>
+
             <select id="experience">
+
                 <option value="">Select Experience</option>
+
                 <option>Beginner</option>
+
                 <option>Intermediate</option>
+
                 <option>Advanced</option>
+
             </select>
+
+
+
             <label>
+
                 Difficulty
+
             </label>
+
             <select id="difficulty">
+
                 <option value="">Select Difficulty</option>
+
                 <option>Easy</option>
+
                 <option>Medium</option>
+
                 <option>Hard</option>
+
             </select>
+
+
+
             <label>
+
                 Skills
+
             </label>
+
             <input
                 type="text"
                 id="skills"
-                placeholder="Example : Java, React, MySQL, JWT"
+                placeholder="Example : Spring Boot, MySQL, JWT"
             >
-            <button class="generate-btn">
 
-                Generate Project
+
+
+            <button id="generateBtn">
+
+                🚀 Generate Project
 
             </button>
+
         </div>
-        <!-- RIGHT CARD -->
-        <div class="result-card">
+
+
+
+        <!-- Right -->
+
+        <div class="right-card">
+
             <h2>
+
                 Generated Project
+
             </h2>
-            <div class="empty-state">
-                <h3>
-                    No Project Generated
-                </h3>
+
+
+
+            <div id="result">
+
+                <h3>No Project Generated</h3>
+
                 <p>
+
                     Fill the form and click
+
                     <b>Generate Project</b>
+
                 </p>
+
             </div>
 
-            <div id="project-result">
-            </div>
         </div>
+
     </section>
-    <!-- FOOTER -->
+
+
+
+    <!-- Footer -->
 
     <footer>
 
-        Built with ❤️ HTML • CSS • JavaScript • Node.js • Express • MySQL • Gemini AI
+        Built By - Deepak Pandey 
 
     </footer>
+
     <script src="script.js"></script>
+
 </body>
+
 </html>
