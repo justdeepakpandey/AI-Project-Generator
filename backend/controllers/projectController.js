@@ -1,6 +1,7 @@
 const { generateProjectIdea } = require("../services/geminiService");
 
 const generateProject = async (req, res) => {
+    console.log("Generate API Hit");
 
     try {
 
