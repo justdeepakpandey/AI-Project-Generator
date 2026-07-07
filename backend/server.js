@@ -6,6 +6,8 @@ const cors = require("cors");
 
 const projectRoutes = require("./routes/projectRoutes");
 const saveRoutes = require("./routes/saveRoutes");
+const getProjectsRoutes = require("./routes/getProjectsRoutes");
+const deleteProjectRoutes = require("./routes/deleteProjectRoutes");
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(express.json());
 
 app.use("/api/projects", projectRoutes);
 app.use("/api/save", saveRoutes);
+app.use("/api/projects/all", getProjectsRoutes);
+app.use("/api/projects/delete", deleteProjectRoutes);
 
 app.listen(5000, () => {
     console.log("Server running on port 5000");
