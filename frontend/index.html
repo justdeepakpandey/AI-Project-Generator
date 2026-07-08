@@ -22,200 +22,158 @@
     <nav class="navbar">
 
         <div class="logo">
-
             ProjectForge AI
-
         </div>
 
-        <ul>
+       <ul>
 
-            <li><a href="#">Home</a></li>
+    <li><a href="index.html">Home</a></li>
 
-            <li><a href="#">Saved Projects</a></li>
+    <li><a href="saved.html">Saved Projects</a></li>
 
-            <li><a href="#">About</a></li>
+    <li><a href="#about">About</a></li>
 
-            <li>
-
-                <button class="login-btn">
-
-                    Login
-
-                </button>
-
-            </li>
-
-        </ul>
+</ul>
 
     </nav>
-
-
 
     <!-- Hero -->
 
     <section class="hero">
 
         <h1>
-
             Generate AI Powered Software Project Ideas
-
         </h1>
 
         <p>
-
             Enter your language, experience and skills to generate complete
             software project ideas with Gemini AI.
-
         </p>
 
     </section>
+    <section class="about" id="about">
 
+    <h2>About ProjectForge AI</h2>
 
+    <p>
+
+        ProjectForge AI is an AI-powered web application that helps developers
+        generate software project ideas based on their programming language,
+        experience level, difficulty preference, and technical skills.
+
+    </p>
+
+    <div class="about-grid">
+
+        <div class="about-card">
+            <h3> AI Powered</h3>
+            <p>Generates unique software project ideas using Google Gemini AI.</p>
+        </div>
+
+        <div class="about-card">
+            <h3> Save Projects</h3>
+            <p>Store generated projects securely in a MySQL database.</p>
+        </div>
+
+        <div class="about-card">
+            <h3> Placement Ready</h3>
+            <p>Helps students discover resume-worthy software project ideas.</p>
+        </div>
+
+    </div>
+
+</section>
 
     <!-- Main -->
 
     <section class="container">
 
-
-
-        <!-- Left -->
+        <!-- Left Card -->
 
         <div class="left-card">
 
-            <h2>
+            <h2>Generate Project</h2>
 
-                Generate Project
-
-            </h2>
-
-
-
-            <label>
-
-                Programming Language
-
-            </label>
+            <label>Programming Language</label>
 
             <select id="language">
-
                 <option value="">Select Language</option>
-
                 <option>Java</option>
-
                 <option>Python</option>
-
                 <option>JavaScript</option>
-
                 <option>C++</option>
-
                 <option>C#</option>
-
             </select>
 
-
-
-            <label>
-
-                Experience
-
-            </label>
+            <label>Experience</label>
 
             <select id="experience">
-
                 <option value="">Select Experience</option>
-
                 <option>Beginner</option>
-
                 <option>Intermediate</option>
-
                 <option>Advanced</option>
-
             </select>
 
-
-
-            <label>
-
-                Difficulty
-
-            </label>
+            <label>Difficulty</label>
 
             <select id="difficulty">
-
                 <option value="">Select Difficulty</option>
-
                 <option>Easy</option>
-
                 <option>Medium</option>
-
                 <option>Hard</option>
-
             </select>
 
-
-
-            <label>
-
-                Skills
-
-            </label>
+            <label>Skills</label>
 
             <input
                 type="text"
                 id="skills"
-                placeholder="Example : Spring Boot, MySQL, JWT"
-            >
-
-
+                placeholder="Example : Spring Boot, MySQL, JWT">
 
             <button id="generateBtn">
-
-                🚀 Generate Project
-
+                Generate Project
             </button>
 
         </div>
 
-
-
-        <!-- Right -->
+        <!-- Right Card -->
 
         <div class="right-card">
 
-            <h2>
-
-                Generated Project
-
-            </h2>
-
-
+            <h2>Generated Project</h2>
 
             <div id="result">
 
                 <h3>No Project Generated</h3>
 
                 <p>
-
                     Fill the form and click
-
                     <b>Generate Project</b>
-
                 </p>
 
             </div>
+
+            <!-- Save Button -->
+
+            <button id="saveBtn" style="display:none; margin-top:20px; width:100%;">
+
+                💾 Save Project
+
+            </button>
 
         </div>
 
     </section>
 
-
-
     <!-- Footer -->
 
     <footer>
 
-        Built By - Deepak Pandey 
+       ProjectForge AI
 
+Built with ❤️ using HTML • CSS • JavaScript • Node.js • Express • MySQL • Google Gemini AI
+
+© 2026 Deepak Pandey. All Rights Reserved.
     </footer>
 
     <script src="script.js"></script>
