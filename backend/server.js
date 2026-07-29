@@ -20,7 +20,9 @@ app.use("/api/projects/all", getProjectsRoutes);
 app.use("/api/projects/delete", deleteProjectRoutes);
 
 const PORT = process.env.PORT || 5000;
-
+app.get("/", (req, res) => {
+    res.send("AI Project Generator Backend is Running 🚀");
+});
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
