@@ -123,64 +123,84 @@ body{
 
 }
 
-.left-card,
-.right-card{
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(20px);
-
-    border:1px solid rgba(255,255,255,.15);
-
-    border-radius:20px;
-
-    padding:30px;
-
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
-
-}
-
-.left-card h2,
-.right-card h2{
-
-    color:#60a5fa;
-    margin-bottom:25px;
-
-}
-
 .left-card label{
 
     display:block;
-    margin-top:18px;
-    margin-bottom:8px;
+    margin-top:22px;
+    margin-bottom:10px;
+    font-size:17px;
     font-weight:600;
+    color:#ffffff;
 
 }
 
-.left-card input,
-.left-card select{
+.left-card select,
+.left-card input{
+
+    width:100%;
+    height:52px;
+    padding:0 16px;
 
     background:#1e293b;
+
     color:white;
+
     border:1px solid #334155;
 
-}
-.left-card select option{
+    border-radius:12px;
 
-    background:#1e293b;
-    color:white;
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+.left-card select:focus,
+.left-card input:focus{
+
+    outline:none;
+    border-color:#3b82f6;
+
+    box-shadow:0 0 12px rgba(59,130,246,.35);
 
 }
 
 .left-card input::placeholder{
 
-    color:#d1d5db;
+    color:#94a3b8;
 
 }
 
-.left-card option{
+#generateBtn{
 
-    color:black;
+    width:100%;
+    height:55px;
+
+    margin-top:35px;
+
+    background:#3b82f6;
+
+    border:none;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#generateBtn:hover{
+
+    background:#2563eb;
+
+    transform:translateY(-2px);
 
 }
 
