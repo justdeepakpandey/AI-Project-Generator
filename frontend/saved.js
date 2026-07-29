@@ -2,7 +2,15 @@ const savedProjects = document.getElementById("savedProjects");
 
 async function loadProjects() {
 
-    savedProjects.innerHTML = "<h3>Loading...</h3>";
+    savedProjects.innerHTML = `
+        <div class="placeholder-state" style="grid-column: 1 / -1;">
+            <div class="placeholder-icon">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+            <h3>Loading Saved Projects...</h3>
+            <p>Fetching data from database.</p>
+        </div>
+    `;
 
     try {
 
@@ -12,7 +20,13 @@ async function loadProjects() {
 
         if (!data.success) {
 
-            savedProjects.innerHTML = "<h3>No Projects Found</h3>";
+            savedProjects.innerHTML = `
+                <div class="placeholder-state" style="grid-column: 1 / -1;">
+                    <div class="placeholder-icon"><i class="fa-solid fa-folder-open"></i></div>
+                    <h3>No Projects Found</h3>
+                    <p>Failed to retrieve saved projects.</p>
+                </div>
+            `;
 
             return;
 
@@ -20,7 +34,13 @@ async function loadProjects() {
 
         if (data.projects.length === 0) {
 
-            savedProjects.innerHTML = "<h3>No Saved Projects</h3>";
+            savedProjects.innerHTML = `
+                <div class="placeholder-state" style="grid-column: 1 / -1;">
+                    <div class="placeholder-icon"><i class="fa-solid fa-folder-plus"></i></div>
+                    <h3>No Saved Projects Yet</h3>
+                    <p>Generate a project idea on the homepage and save it to view it here.</p>
+                </div>
+            `;
 
             return;
 
@@ -29,47 +49,41 @@ async function loadProjects() {
         let html = "";
 
         data.projects.forEach(project => {
+            const diffClass = (project.difficulty || '').toLowerCase() === 'hard' ? 'diff-hard' :
+                             (project.difficulty || '').toLowerCase() === 'medium' ? 'diff-medium' : 'diff-easy';
 
             html += `
 
             <div class="project-card">
 
-                <h2>${project.language} Project</h2>
+                <div>
+                    <h2><i class="fa-solid fa-code"></i> ${project.language} Project</h2>
 
-                <p><strong>Experience :</strong> ${project.experience}</p>
+                    <div class="project-meta-badge">
+                        <span class="meta-chip"><i class="fa-solid fa-user-graduate"></i> ${project.experience}</span>
+                        <span class="meta-chip ${diffClass}"><i class="fa-solid fa-gauge-high"></i> ${project.difficulty}</span>
+                    </div>
 
-                <p><strong>Difficulty :</strong> ${project.difficulty}</p>
+                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px;">
+                        <strong><i class="fa-solid fa-layer-group"></i> Skills:</strong> ${project.skills}
+                    </p>
 
-                <p><strong>Skills :</strong> ${project.skills}</p>
+                    <details>
 
-                <details style="margin-top:15px;">
+                        <summary>
+                            <i class="fa-solid fa-eye"></i> View Generated Details
+                        </summary>
 
-                    <summary style="cursor:pointer;font-weight:bold;">
-                        👁 View Generated Project
-                    </summary>
+                        <pre style="white-space:pre-wrap;">${project.project}</pre>
 
-                    <pre style="white-space:pre-wrap;margin-top:15px;">
-${project.project}
-                    </pre>
-
-                </details>
+                    </details>
+                </div>
 
                 <button
+                    class="delete-btn"
                     onclick="deleteProject(${project.id})"
-                    style="
-                        margin-top:20px;
-                        width:100%;
-                        padding:12px;
-                        background:#ff4d4d;
-                        color:white;
-                        border:none;
-                        border-radius:8px;
-                        cursor:pointer;
-                    "
                 >
-
-                    🗑 Delete Project
-
+                    <i class="fa-solid fa-trash-can"></i> Delete Project
                 </button>
 
             </div>
@@ -86,7 +100,13 @@ ${project.project}
 
         console.log(error);
 
-        savedProjects.innerHTML = "<h3>Server Error</h3>";
+        savedProjects.innerHTML = `
+            <div class="placeholder-state" style="grid-column: 1 / -1;">
+                <div class="placeholder-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <h3>Server Error</h3>
+                <p>Unable to connect to the backend server.</p>
+            </div>
+        `;
 
     }
 

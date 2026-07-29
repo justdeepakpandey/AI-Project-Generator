@@ -4,44 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saved Projects</title>
+    <title>Saved Projects - ProjectForge AI</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 
 <body>
 
-    <nav class="navbar">
+    <!-- Navbar -->
+    <div class="navbar-wrapper">
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <span class="logo-badge"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                ProjectForge AI
+            </a>
 
-        <div class="logo">
-            ProjectForge AI
+            <ul>
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="saved.html" class="active"><i class="fa-solid fa-bookmark"></i> Saved Projects</a></li>
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Container -->
+    <section class="about-page">
+        <div class="about-header">
+            <h1>Saved Projects</h1>
+            <p>View, manage, and inspect all software project ideas saved in your database repository.</p>
         </div>
 
-        <ul>
-
-            <li><a href="index.html">Home</a></li>
-
-            <li><a href="saved.html">Saved Projects</a></li>
-
-        </ul>
-
-    </nav>
-
-    <section class="container">
-
-        <div class="right-card" style="width:100%;">
-
-            <h2>Saved Projects</h2>
-
-            <div id="savedProjects">
-
-                Loading...
-
+        <div id="savedProjects">
+            <div class="placeholder-state" style="grid-column: 1 / -1;">
+                <div class="placeholder-icon">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                </div>
+                <h3>Loading Saved Projects...</h3>
+                <p>Retrieving your project records from MySQL database.</p>
             </div>
-
         </div>
-
     </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">ProjectForge AI</div>
+        <p>Built with HTML • CSS • JavaScript • Node.js • Express • MySQL • Google Gemini AI</p>
+        <p>© 2026 Deepak Pandey. All Rights Reserved.</p>
+    </footer>
 
     <script src="saved.js"></script>
 

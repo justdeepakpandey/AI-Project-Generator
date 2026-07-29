@@ -4,177 +4,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProjectForge AI</title>
+    <title>ProjectForge AI - AI Software Idea Generator</title>
 
     <link rel="stylesheet" href="style.css">
 
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- Navbar -->
+    <!-- Sticky Glass Navbar -->
+    <div class="navbar-wrapper">
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <span class="logo-badge"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                ProjectForge AI
+            </a>
 
-    <nav class="navbar">
+            <ul>
+                <li><a href="index.html" class="active"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="saved.html"><i class="fa-solid fa-bookmark"></i> Saved Projects</a></li>
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            </ul>
+        </nav>
+    </div>
 
-        <div class="logo">
-            ProjectForge AI
-        </div>
-
-       <ul>
-
-    <li><a href="index.html">Home</a></li>
-
-    <li><a href="saved.html">Saved Projects</a></li>
-
-    <li><a href="#about">About</a></li>
-
-</ul>
-
-    </nav>
-
-    <!-- Hero -->
-
+    <!-- Hero Section -->
     <section class="hero">
+        <span class="hero-tag">
+            <i class="fa-solid fa-bolt"></i> AI-Powered Idea Generator
+        </span>
 
         <h1>
-            Generate AI Powered Software Project Ideas
+            Build Your Next <span>Placement Ready</span> Project with AI
         </h1>
 
         <p>
-            Enter your language, experience and skills to generate complete
-            software project ideas with Gemini AI.
+            Instantly generate tailored software project concepts based on your preferred technology, experience level, and tech stack using Google Gemini AI.
         </p>
 
+        <div class="tech-stack">
+            <span><i class="fa-brands fa-java"></i> Java</span>
+            <span><i class="fa-brands fa-node-js"></i> Node.js</span>
+            <span><i class="fa-solid fa-server"></i> Express</span>
+            <span><i class="fa-solid fa-database"></i> MySQL</span>
+            <span><i class="fa-solid fa-brain"></i> Gemini AI</span>
+        </div>
     </section>
-    <section class="about" id="about">
 
-    <h2>About ProjectForge AI</h2>
-
-    <p>
-
-        ProjectForge AI is an AI-powered web application that helps developers
-        generate software project ideas based on their programming language,
-        experience level, difficulty preference, and technical skills.
-
-    </p>
-
-    <div class="about-grid">
-
-        <div class="about-card">
-            <h3> AI Powered</h3>
-            <p>Generates unique software project ideas using Google Gemini AI.</p>
-        </div>
-
-        <div class="about-card">
-            <h3> Save Projects</h3>
-            <p>Store generated projects securely in a MySQL database.</p>
-        </div>
-
-        <div class="about-card">
-            <h3> Placement Ready</h3>
-            <p>Helps students discover resume-worthy software project ideas.</p>
-        </div>
-
-    </div>
-
-</section>
-
-    <!-- Main -->
-
+    <!-- Main Container -->
     <section class="container">
 
-        <!-- Left Card -->
-
+        <!-- Left Card: Form Controls -->
         <div class="left-card">
+            <div class="card-title">
+                <i class="fa-solid fa-sliders"></i> Generate Project
+            </div>
 
-            <h2>Generate Project</h2>
+            <div class="form-group">
+                <label for="language">Programming Language</label>
+                <div class="select-wrapper">
+                    <select id="language">
+                        <option value="">Select Language</option>
+                        <option>Java</option>
+                        <option>Python</option>
+                        <option>JavaScript</option>
+                        <option>C++</option>
+                        <option>C#</option>
+                    </select>
+                </div>
+            </div>
 
-            <label>Programming Language</label>
+            <div class="form-group">
+                <label for="experience">Experience Level</label>
+                <div class="select-wrapper">
+                    <select id="experience">
+                        <option value="">Select Experience</option>
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+            </div>
 
-            <select id="language">
-                <option value="">Select Language</option>
-                <option>Java</option>
-                <option>Python</option>
-                <option>JavaScript</option>
-                <option>C++</option>
-                <option>C#</option>
-            </select>
+            <div class="form-group">
+                <label for="difficulty">Project Difficulty</label>
+                <div class="select-wrapper">
+                    <select id="difficulty">
+                        <option value="">Select Difficulty</option>
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
+                </div>
+            </div>
 
-            <label>Experience</label>
-
-            <select id="experience">
-                <option value="">Select Experience</option>
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
-            </select>
-
-            <label>Difficulty</label>
-
-            <select id="difficulty">
-                <option value="">Select Difficulty</option>
-                <option>Easy</option>
-                <option>Medium</option>
-                <option>Hard</option>
-            </select>
-
-            <label>Skills</label>
-
-            <input
-                type="text"
-                id="skills"
-                placeholder="Example : Spring Boot, MySQL, JWT">
+            <div class="form-group">
+                <label for="skills">Technical Skills & Frameworks</label>
+                <input
+                    type="text"
+                    id="skills"
+                    placeholder="e.g. Spring Boot, MySQL, JWT, React">
+            </div>
 
             <button id="generateBtn">
-                Generate Project
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Project
             </button>
-
         </div>
 
-        <!-- Right Card -->
-
+        <!-- Right Card: Generated Output -->
         <div class="right-card">
-
-            <h2>Generated Project</h2>
+            <div class="card-title">
+                <i class="fa-solid fa-code"></i> Generated Project
+            </div>
 
             <div id="result">
-
-                <h3>No Project Generated</h3>
-
-                <p>
-                    Fill the form and click
-                    <b>Generate Project</b>
-                </p>
-
+                <div class="placeholder-state">
+                    <div class="placeholder-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3>No Project Generated Yet</h3>
+                    <p>Configure your parameters on the left and click <b>Generate Project</b> to start forging.</p>
+                </div>
             </div>
 
             <!-- Save Button -->
-
-            <button id="saveBtn" style="display:none; margin-top:20px; width:100%;">
-
-                💾 Save Project
-
+            <button id="saveBtn" style="display:none; margin-top:20px;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Project
             </button>
-
         </div>
 
     </section>
 
     <!-- Footer -->
-
     <footer>
-
-       ProjectForge AI
-
-Built with using HTML • CSS • JavaScript • Node.js • Express • MySQL • Google Gemini AI
-
-© 2026 
-  By- Deepak Pandey. All Rights Reserved.
+        <div class="footer-brand">ProjectForge AI</div>
+        <p>Built with HTML • CSS • JavaScript • Node.js • Express • MySQL • Google Gemini AI</p>
+        <p>© 2026 Deepak Pandey. All Rights Reserved.</p>
     </footer>
 
     <script src="script.js"></script>

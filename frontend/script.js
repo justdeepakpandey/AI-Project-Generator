@@ -21,7 +21,13 @@ generateBtn.addEventListener("click", async function () {
         return;
     }
 
-    result.innerHTML = "<h3>Generating Project...</h3>";
+    result.innerHTML = `
+        <div class="placeholder-state">
+            <div class="placeholder-icon"><i class="fa-solid fa-spinner fa-spin"></i></div>
+            <h3>Forging Project Idea...</h3>
+            <p>Asking Google Gemini AI to craft your custom project spec.</p>
+        </div>
+    `;
     saveBtn.style.display = "none";
 
     try {
@@ -50,8 +56,11 @@ generateBtn.addEventListener("click", async function () {
         if (!data.success) {
 
             result.innerHTML = `
-                <h3>Error</h3>
-                <p>${data.message}</p>
+                <div class="placeholder-state" style="border-color: rgba(239, 68, 68, 0.3);">
+                    <div class="placeholder-icon" style="color: var(--danger);"><i class="fa-solid fa-circle-exclamation"></i></div>
+                    <h3 style="color: var(--danger);">Generation Failed</h3>
+                    <p>${data.message}</p>
+                </div>
             `;
 
             return;
@@ -60,10 +69,12 @@ generateBtn.addEventListener("click", async function () {
         currentProject = data.project;
 
         result.innerHTML = `
-            <pre style="white-space:pre-wrap;">${data.project}</pre>
+            <div class="generated-content-box">
+                <pre style="white-space:pre-wrap;">${data.project}</pre>
+            </div>
         `;
 
-        saveBtn.style.display = "block";
+        saveBtn.style.display = "flex";
 
     }
 
@@ -72,8 +83,11 @@ generateBtn.addEventListener("click", async function () {
         console.error(error);
 
         result.innerHTML = `
-            <h3>Server Error</h3>
-            <p>${error.message}</p>
+            <div class="placeholder-state" style="border-color: rgba(239, 68, 68, 0.3);">
+                <div class="placeholder-icon" style="color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <h3 style="color: var(--danger);">Server Connection Error</h3>
+                <p>${error.message}</p>
+            </div>
         `;
 
     }
