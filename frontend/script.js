@@ -2,6 +2,8 @@ const generateBtn = document.getElementById("generateBtn");
 const result = document.getElementById("result");
 const saveBtn = document.getElementById("saveBtn");
 
+const API_URL = "https://ai-project-generator-1-7qz8.onrender.com";
+
 let currentProject = "";
 
 generateBtn.addEventListener("click", async function () {
@@ -23,30 +25,29 @@ generateBtn.addEventListener("click", async function () {
 
     result.innerHTML = `
         <div class="placeholder-state">
-            <div class="placeholder-icon"><i class="fa-solid fa-spinner fa-spin"></i></div>
+            <div class="placeholder-icon">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
             <h3>Forging Project Idea...</h3>
             <p>Asking Google Gemini AI to craft your custom project spec.</p>
         </div>
     `;
+
     saveBtn.style.display = "none";
 
     try {
 
-        const response = await fetch("http://localhost:5000/api/projects/generate", {
-
+        const response = await fetch(`${API_URL}/api/projects/generate`, {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
                 language,
                 experience,
                 difficulty,
                 skills
             })
-
         });
 
         const data = await response.json();
@@ -56,9 +57,8 @@ generateBtn.addEventListener("click", async function () {
         if (!data.success) {
 
             result.innerHTML = `
-                <div class="placeholder-state" style="border-color: rgba(239, 68, 68, 0.3);">
-                    <div class="placeholder-icon" style="color: var(--danger);"><i class="fa-solid fa-circle-exclamation"></i></div>
-                    <h3 style="color: var(--danger);">Generation Failed</h3>
+                <div class="placeholder-state">
+                    <h3>Generation Failed</h3>
                     <p>${data.message}</p>
                 </div>
             `;
@@ -70,22 +70,19 @@ generateBtn.addEventListener("click", async function () {
 
         result.innerHTML = `
             <div class="generated-content-box">
-                <pre style="white-space:pre-wrap;">${data.project}</pre>
+                <pre style="white-space: pre-wrap;">${data.project}</pre>
             </div>
         `;
 
         saveBtn.style.display = "flex";
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 
         result.innerHTML = `
-            <div class="placeholder-state" style="border-color: rgba(239, 68, 68, 0.3);">
-                <div class="placeholder-icon" style="color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                <h3 style="color: var(--danger);">Server Connection Error</h3>
+            <div class="placeholder-state">
+                <h3>Server Connection Error</h3>
                 <p>${error.message}</p>
             </div>
         `;
@@ -103,44 +100,31 @@ saveBtn.addEventListener("click", async function () {
 
     try {
 
-        const response = await fetch("http://localhost:5000/api/save", {
-
+        const response = await fetch(`${API_URL}/api/save`, {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
-
                 language,
                 experience,
                 difficulty,
                 skills,
                 project: currentProject
-
             })
-
         });
 
         const data = await response.json();
 
         if (data.success) {
-
             alert("Project Saved Successfully ✅");
-
         } else {
-
             alert(data.message);
-
         }
 
-    }
+    } catch (error) {
 
-    catch (error) {
-
-        console.log(error);
-
+        console.error(error);
         alert("Unable to Save Project.");
 
     }
