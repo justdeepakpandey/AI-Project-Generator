@@ -19,6 +19,8 @@ app.use("/api/save", saveRoutes);
 app.use("/api/projects/all", getProjectsRoutes);
 app.use("/api/projects/delete", deleteProjectRoutes);
 
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
