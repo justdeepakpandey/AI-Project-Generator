@@ -1,4 +1,5 @@
 console.log("geminiService loaded");
+
 const { GoogleGenAI } = require("@google/genai");
 
 const ai = new GoogleGenAI({
@@ -7,11 +8,26 @@ const ai = new GoogleGenAI({
 
 const generateProjectIdea = async (language, experience, difficulty, skills) => {
 
-    const prompt = `Your prompt here`;
+    const prompt = `
+Generate one software project idea based on the following details.
+
+Programming Language: ${language}
+Experience Level: ${experience}
+Difficulty: ${difficulty}
+Skills: ${skills}
+
+Return ONLY in this format:
+
+Project Title:
+Description:
+Features:
+Tech Stack:
+Estimated Time:
+`;
 
     try {
         const response = await ai.models.generateContent({
-            model: model: "gemini-2.0-flash",
+            model: "gemini-2.0-flash",
             contents: prompt
         });
 
@@ -20,6 +36,7 @@ const generateProjectIdea = async (language, experience, difficulty, skills) => 
     } catch (err) {
         console.error("FULL ERROR:");
         console.error(err);
+
         throw err;
     }
 };
