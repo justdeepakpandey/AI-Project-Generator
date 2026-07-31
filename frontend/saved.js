@@ -1,4 +1,3 @@
-const API_URL = "https://ai-project-generator-1-7qz8.onrender.com";
 const savedProjects = document.getElementById("savedProjects");
 
 async function loadProjects() {
@@ -15,12 +14,28 @@ async function loadProjects() {
 
     try {
 
-        const response = await fetch(`${API_URL}/api/projects/all`);
+        // apiClient automatically adds JWT header if user is logged in
+        const response = await window.apiClient("/api/projects/all");
 
         const data = await response.json();
 
-        if (!data.success) {
+        // 401 with requiresAuth — apiClient already opened the login modal
+        if (response.status === 401 && data.requiresAuth) {
+            savedProjects.innerHTML = `
+                <div class="placeholder-state" style="grid-column: 1 / -1;">
+                    <div class="placeholder-icon"><i class="fa-solid fa-lock"></i></div>
+                    <h3>Login Required</h3>
+                    <p>${data.message || "Please login to view your saved projects."}</p>
+                    <button class="modal-submit-btn" style="margin-top:16px;max-width:220px;"
+                            onclick="AuthManager.openModal('loginModal')">
+                        <i class="fa-solid fa-right-to-bracket"></i> Login
+                    </button>
+                </div>
+            `;
+            return;
+        }
 
+        if (!data.success) {
             savedProjects.innerHTML = `
                 <div class="placeholder-state" style="grid-column: 1 / -1;">
                     <div class="placeholder-icon"><i class="fa-solid fa-folder-open"></i></div>
@@ -28,13 +43,10 @@ async function loadProjects() {
                     <p>Failed to retrieve saved projects.</p>
                 </div>
             `;
-
             return;
-
         }
 
         if (data.projects.length === 0) {
-
             savedProjects.innerHTML = `
                 <div class="placeholder-state" style="grid-column: 1 / -1;">
                     <div class="placeholder-icon"><i class="fa-solid fa-folder-plus"></i></div>
@@ -42,19 +54,16 @@ async function loadProjects() {
                     <p>Generate a project idea on the homepage and save it to view it here.</p>
                 </div>
             `;
-
             return;
-
         }
 
         let html = "";
 
         data.projects.forEach(project => {
-            const diffClass = (project.difficulty || '').toLowerCase() === 'hard' ? 'diff-hard' :
+            const diffClass = (project.difficulty || '').toLowerCase() === 'hard'   ? 'diff-hard' :
                              (project.difficulty || '').toLowerCase() === 'medium' ? 'diff-medium' : 'diff-easy';
 
             html += `
-
             <div class="project-card">
 
                 <div>
@@ -70,13 +79,10 @@ async function loadProjects() {
                     </p>
 
                     <details>
-
                         <summary>
                             <i class="fa-solid fa-eye"></i> View Generated Details
                         </summary>
-
                         <pre style="white-space:pre-wrap;">${project.project}</pre>
-
                     </details>
                 </div>
 
@@ -88,24 +94,20 @@ async function loadProjects() {
                 </button>
 
             </div>
-
             `;
-
         });
 
         savedProjects.innerHTML = html;
 
-    }
+    } catch (error) {
 
-    catch (error) {
-
-        console.log(error);
+        console.error("Saved Projects Error:", error);
 
         savedProjects.innerHTML = `
             <div class="placeholder-state" style="grid-column: 1 / -1;">
                 <div class="placeholder-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
                 <h3>Server Error</h3>
-                <p>Unable to connect to the backend server.</p>
+                <p>${error.message}</p>
             </div>
         `;
 
@@ -116,34 +118,44 @@ async function loadProjects() {
 async function deleteProject(id) {
 
     const confirmDelete = confirm("Delete this project?");
-
     if (!confirmDelete) return;
 
     try {
 
-        const response = await fetch(`${API_URL}/api/projects/delete/${id}`, {
-    method: "DELETE"
-});
+        // apiClient adds JWT header automatically; requireAuth on backend will block if not logged in
+        const response = await window.apiClient(`/api/projects/delete/${id}`, {
+            method: "DELETE"
+        });
 
         const data = await response.json();
 
-        alert(data.message);
+        if (data.success) {
+            if (window.Toast) {
+                Toast.success(data.message || "Project Deleted Successfully");
+            } else {
+                alert(data.message);
+            }
+            loadProjects();
+        } else if (!data.requiresAuth) {
+            // requiresAuth case is handled by apiClient already (opens login modal)
+            if (window.Toast) {
+                Toast.error(data.message || "Could not delete project.");
+            } else {
+                alert(data.message);
+            }
+        }
 
-        loadProjects();
-
+    } catch (error) {
+        console.error("Delete Error:", error);
+        savedProjects.innerHTML = `
+            <div class="placeholder-state" style="grid-column: 1 / -1;">
+                <h3>Server Error</h3>
+                <p>${error.message}</p>
+            </div>
+        `;
     }
 
-   catch (error) {
-    console.error("Saved Projects Error:", error);
-
-    savedProjects.innerHTML = `
-        <div class="placeholder-state" style="grid-column: 1 / -1;">
-            <h3>Server Error</h3>
-            <p>${error.message}</p>
-        </div>
-    `;
 }
 
-}
-
+// Load projects on page init
 loadProjects();

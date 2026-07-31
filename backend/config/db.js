@@ -1,24 +1,31 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
+// Use createPool instead of createConnection:
+//   - Pool auto-reconnects if the connection drops (important for Render/Aiven)
+//   - Pool supports concurrent queries from multiple controllers
+//   - db.query() returns a Promise — works with async/await directly
+const pool = mysql.createPool({
+    host:     process.env.DB_HOST,
+    port:     process.env.DB_PORT,
+    user:     process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     ssl: {
         rejectUnauthorized: false
-    }
+    },
+    waitForConnections: true,
+    connectionLimit:    10,
+    queueLimit:         0
 });
 
-connection.connect((err) => {
-    if (err) {
-        console.log("Database Connection Failed");
-        console.log(err);
-        return;
-    }
+// Verify connection on startup
+pool.getConnection()
+    .then(conn => {
+        console.log("MySQL Connected ✅");
+        conn.release();
+    })
+    .catch(err => {
+        console.error("Database Connection Failed ❌", err.message);
+    });
 
-    console.log("MySQL Connected");
-});
-
-module.exports = connection;
+module.exports = pool;

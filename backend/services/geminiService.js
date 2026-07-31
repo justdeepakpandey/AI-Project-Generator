@@ -34,3 +34,6 @@ Tech Stack:
 module.exports = {
     generateProjectIdea
 };
+console.log("Gemini Key:", process.env.GEMINI_API_KEY);
+console.log("Starts with AIza:", process.env.GEMINI_API_KEY?.startsWith("AIza"));
+console.log("Starts with AQ:", process.env.GEMINI_API_KEY?.startsWith("AQ."));

@@ -44,7 +44,7 @@ const AuthManager = {
         this.clearSession();
         this.renderNavbarAuthUI();
         if (window.Toast) Toast.info("Logged out successfully.");
-        
+
         if (window.location.pathname.includes("saved.html")) {
             window.location.reload();
         }
@@ -99,7 +99,7 @@ const AuthManager = {
         } else {
             authContainer.innerHTML = `
                 <div class="auth-btn-group">
-                    <button class="guest-badge-btn" onclick="AuthManager.openModal('loginModal')">
+                    <button class="guest-badge-btn" onclick="AuthManager.openModal('loginModal')" title="Continue as Guest — Generate projects freely">
                         <i class="fa-solid fa-user-ninja"></i> Guest Mode
                     </button>
                     <button class="btn-secondary-sm" onclick="AuthManager.openModal('loginModal')">
@@ -126,6 +126,11 @@ const AuthManager = {
         if (modal) {
             modal.style.display = "flex";
             document.body.style.overflow = "hidden";
+            // Focus first input
+            setTimeout(() => {
+                const input = modal.querySelector("input");
+                if (input) input.focus();
+            }, 100);
         }
     },
 
@@ -140,6 +145,11 @@ const AuthManager = {
     closeAllModals() {
         document.querySelectorAll(".modal-overlay").forEach(m => m.style.display = "none");
         document.body.style.overflow = "";
+    },
+
+    switchModal(fromId, toId) {
+        this.closeModal(fromId);
+        this.openModal(toId);
     },
 
     showLoginPrompt(customMessage) {
@@ -165,6 +175,99 @@ const AuthManager = {
         if (window.Toast) Toast.info(`Switched to ${newTheme} theme.`);
     },
 
+    // ── Login form handler ────────────────────────────────────────────────
+    async handleLogin(e) {
+        e.preventDefault();
+        const form = e.target;
+        const btn = form.querySelector("#loginSubmitBtn");
+        const email = (form.querySelector("#loginEmail").value || "").trim();
+        const password = form.querySelector("#loginPassword").value || "";
+        const remember = form.querySelector("#rememberMe") ? form.querySelector("#rememberMe").checked : true;
+
+        if (!email || !password) {
+            if (window.Toast) Toast.warning("Please enter your email and password.");
+            return;
+        }
+
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
+        btn.disabled = true;
+
+        try {
+            const res = await window.apiClient("/api/auth/login", {
+                method: "POST",
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                this.saveSession(data.token, data.user, remember);
+                this.closeAllModals();
+                if (window.Toast) Toast.success(`Welcome back, ${data.user.name}! 👋`);
+                form.reset();
+                // Reload saved page after login to show user's projects
+                if (window.location.pathname.includes("saved.html")) {
+                    if (typeof loadProjects === "function") loadProjects();
+                }
+            } else {
+                if (window.Toast) Toast.error(data.message || "Login failed. Please try again.");
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+            if (window.Toast) Toast.error("Connection error. Please try again.");
+        } finally {
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        }
+    },
+
+    // ── Register form handler ─────────────────────────────────────────────
+    async handleRegister(e) {
+        e.preventDefault();
+        const form = e.target;
+        const btn = form.querySelector("#registerSubmitBtn");
+        const name     = (form.querySelector("#registerName").value || "").trim();
+        const email    = (form.querySelector("#registerEmail").value || "").trim();
+        const password = form.querySelector("#registerPassword").value || "";
+
+        if (!name || !email || !password) {
+            if (window.Toast) Toast.warning("Please fill in all fields.");
+            return;
+        }
+        if (password.length < 6) {
+            if (window.Toast) Toast.warning("Password must be at least 6 characters.");
+            return;
+        }
+
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating account…';
+        btn.disabled = true;
+
+        try {
+            const res = await window.apiClient("/api/auth/register", {
+                method: "POST",
+                body: JSON.stringify({ name, email, password })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                this.saveSession(data.token, data.user, true);
+                this.closeAllModals();
+                if (window.Toast) Toast.success(`Account created! Welcome, ${data.user.name}! 🎉`);
+                form.reset();
+            } else {
+                if (window.Toast) Toast.error(data.message || "Registration failed. Please try again.");
+            }
+        } catch (err) {
+            console.error("Register error:", err);
+            if (window.Toast) Toast.error("Connection error. Please try again.");
+        } finally {
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        }
+    },
+
+    // ── Google Sign-In ────────────────────────────────────────────────────
     async handleGoogleCredentialResponse(response) {
         try {
             const res = await window.apiClient("/api/auth/google", {
@@ -180,11 +283,21 @@ const AuthManager = {
                 if (window.Toast) Toast.error(data.message);
             }
         } catch (err) {
-            if (window.Toast) Toast.error("Google login failed.");
+            if (window.Toast) Toast.error("Google login failed. Please use email login.");
         }
     },
 
+    triggerGoogleSignIn() {
+        if (window.google && window.google.accounts) {
+            window.google.accounts.id.prompt();
+        } else {
+            if (window.Toast) Toast.info("Google Login is not configured for this deployment. Please use email login.");
+        }
+    },
+
+    // ── Global event bindings ─────────────────────────────────────────────
     bindEvents() {
+        // Close profile dropdown on outside click
         window.addEventListener("click", (e) => {
             if (!e.target.closest(".profile-dropdown-wrapper")) {
                 const dropdown = document.getElementById("profileDropdown");
@@ -192,10 +305,22 @@ const AuthManager = {
             }
         });
 
+        // Close modal when clicking backdrop
         window.addEventListener("click", (e) => {
             if (e.target.classList.contains("modal-overlay")) {
                 this.closeAllModals();
             }
+        });
+
+        // Close modal on Escape key
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") this.closeAllModals();
+        });
+
+        // Form submit delegation — handles both pages
+        document.addEventListener("submit", (e) => {
+            if (e.target && e.target.id === "loginForm")    this.handleLogin(e);
+            if (e.target && e.target.id === "registerForm") this.handleRegister(e);
         });
     }
 };
@@ -206,6 +331,9 @@ function escapeHtml(text) {
     div.innerText = text;
     return div.innerHTML;
 }
+
+// Make global callback for Google GSI
+window.handleGoogleCredentialResponse = (r) => AuthManager.handleGoogleCredentialResponse(r);
 
 window.AuthManager = AuthManager;
 document.addEventListener("DOMContentLoaded", () => {

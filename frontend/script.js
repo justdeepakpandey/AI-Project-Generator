@@ -1,25 +1,29 @@
 const generateBtn = document.getElementById("generateBtn");
-const result = document.getElementById("result");
-const saveBtn = document.getElementById("saveBtn");
-
-const API_URL = "https://ai-project-generator-1-7qz8.onrender.com";
+const result      = document.getElementById("result");
+const saveBtn     = document.getElementById("saveBtn");
 
 let currentProject = "";
 
+// ── Generate Project ──────────────────────────────────────────────────────────
+
 generateBtn.addEventListener("click", async function () {
 
-    const language = document.getElementById("language").value;
+    const language   = document.getElementById("language").value;
     const experience = document.getElementById("experience").value;
     const difficulty = document.getElementById("difficulty").value;
-    const skills = document.getElementById("skills").value;
+    const skills     = document.getElementById("skills").value;
 
     if (
-        language === "" ||
+        language   === "" ||
         experience === "" ||
         difficulty === "" ||
         skills.trim() === ""
     ) {
-        alert("Please fill all fields.");
+        if (window.Toast) {
+            Toast.warning("Please fill in all fields.");
+        } else {
+            alert("Please fill all fields.");
+        }
         return;
     }
 
@@ -28,26 +32,21 @@ generateBtn.addEventListener("click", async function () {
             <div class="placeholder-icon">
                 <i class="fa-solid fa-spinner fa-spin"></i>
             </div>
-            <h3>Forging Project Idea...</h3>
+            <h3>Forging Project Idea…</h3>
             <p>Asking Google Gemini AI to craft your custom project spec.</p>
         </div>
     `;
 
     saveBtn.style.display = "none";
+    currentProject = "";
 
     try {
 
-        const response = await fetch(`${API_URL}/api/projects/generate`, {
+        // wakeBackend: true — shows cold-start overlay + uses 90s timeout
+        const response = await window.apiClient("/api/projects/generate", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                language,
-                experience,
-                difficulty,
-                skills
-            })
+            wakeBackend: true,
+            body: JSON.stringify({ language, experience, difficulty, skills })
         });
 
         const data = await response.json();
@@ -55,14 +54,12 @@ generateBtn.addEventListener("click", async function () {
         console.log(data);
 
         if (!data.success) {
-
             result.innerHTML = `
                 <div class="placeholder-state">
                     <h3>Generation Failed</h3>
                     <p>${data.message}</p>
                 </div>
             `;
-
             return;
         }
 
@@ -91,20 +88,25 @@ generateBtn.addEventListener("click", async function () {
 
 });
 
+// ── Save Project ──────────────────────────────────────────────────────────────
+
 saveBtn.addEventListener("click", async function () {
 
-    const language = document.getElementById("language").value;
+    // Guest check — if not logged in, open login prompt modal instead of saving
+    if (window.AuthManager && !window.AuthManager.isLoggedIn()) {
+        window.AuthManager.showLoginPrompt("Please login or create a free account to save your projects.");
+        return;
+    }
+
+    const language   = document.getElementById("language").value;
     const experience = document.getElementById("experience").value;
     const difficulty = document.getElementById("difficulty").value;
-    const skills = document.getElementById("skills").value;
+    const skills     = document.getElementById("skills").value;
 
     try {
 
-        const response = await fetch(`${API_URL}/api/save`, {
+        const response = await window.apiClient("/api/save", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify({
                 language,
                 experience,
@@ -117,15 +119,31 @@ saveBtn.addEventListener("click", async function () {
         const data = await response.json();
 
         if (data.success) {
-            alert("Project Saved Successfully ✅");
+            if (window.Toast) {
+                Toast.success("Project Saved Successfully ✅");
+            } else {
+                alert("Project Saved Successfully ✅");
+            }
         } else {
-            alert(data.message);
+            // 401 with requiresAuth is handled automatically by apiClient
+            // Only show error for non-auth failures
+            if (!data.requiresAuth) {
+                if (window.Toast) {
+                    Toast.error(data.message || "Unable to save project.");
+                } else {
+                    alert(data.message);
+                }
+            }
         }
 
     } catch (error) {
 
         console.error(error);
-        alert("Unable to Save Project.");
+        if (window.Toast) {
+            Toast.error("Unable to Save Project.");
+        } else {
+            alert("Unable to Save Project.");
+        }
 
     }
 

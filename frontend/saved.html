@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saved Projects - ProjectForge AI</title>
+    <meta name="description" content="View and manage your saved AI-generated software project ideas.">
 
     <link rel="stylesheet" href="style.css">
 
@@ -29,6 +30,9 @@
                 <li><a href="saved.html" class="active"><i class="fa-solid fa-bookmark"></i> Saved Projects</a></li>
                 <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a></li>
             </ul>
+
+            <!-- Auth UI injected here by auth.js -->
+            <div id="navbar-auth-container"></div>
         </nav>
     </div>
 
@@ -36,7 +40,7 @@
     <section class="about-page">
         <div class="about-header">
             <h1>Saved Projects</h1>
-            <p>View, manage, and inspect all software project ideas saved in your database repository.</p>
+            <p>View, manage, and inspect all software project ideas saved in your personal repository.</p>
         </div>
 
         <div id="savedProjects">
@@ -57,6 +61,146 @@
         <p>© 2026 Deepak Pandey. All Rights Reserved.</p>
     </footer>
 
+    <!-- ═══════════════════════════════════════════════════════════════
+         LOGIN MODAL
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="loginModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle2">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="AuthManager.closeModal('loginModal')" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header">
+                <div class="modal-icon-circle">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                </div>
+                <h2 id="loginModalTitle2">Welcome Back</h2>
+                <p>Sign in to view and manage your saved projects</p>
+            </div>
+
+            <form id="loginForm" class="modal-form" novalidate>
+                <div class="modal-form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required>
+                </div>
+                <div class="modal-form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password" required>
+                </div>
+                <div class="remember-row">
+                    <label class="remember-label">
+                        <input type="checkbox" id="rememberMe" checked>
+                        <span>Remember me</span>
+                    </label>
+                </div>
+                <button type="submit" id="loginSubmitBtn" class="modal-submit-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                </button>
+            </form>
+
+            <div class="modal-divider"><span>or</span></div>
+
+            <button class="google-signin-btn" onclick="AuthManager.triggerGoogleSignIn()" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <p class="modal-switch-text">
+                Don't have an account?
+                <a href="#" onclick="AuthManager.switchModal('loginModal','registerModal'); return false;">Sign up free</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         REGISTER MODAL
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="registerModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="registerModalTitle2">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="AuthManager.closeModal('registerModal')" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header">
+                <div class="modal-icon-circle" style="background: linear-gradient(135deg,#22c55e,#16a34a);">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h2 id="registerModalTitle2">Create Account</h2>
+                <p>Free forever — no credit card required</p>
+            </div>
+
+            <form id="registerForm" class="modal-form" novalidate>
+                <div class="modal-form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" placeholder="Your name" autocomplete="name" required>
+                </div>
+                <div class="modal-form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" placeholder="you@example.com" autocomplete="email" required>
+                </div>
+                <div class="modal-form-group">
+                    <label for="registerPassword">Password <span style="font-weight:400;font-size:12px;color:var(--text-dim)">(min 6 chars)</span></label>
+                    <input type="password" id="registerPassword" placeholder="Create a password" autocomplete="new-password" required>
+                </div>
+                <button type="submit" id="registerSubmitBtn" class="modal-submit-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 8px 25px rgba(34,197,94,0.3);">
+                    <i class="fa-solid fa-user-plus"></i> Create Free Account
+                </button>
+            </form>
+
+            <div class="modal-divider"><span>or</span></div>
+
+            <button class="google-signin-btn" onclick="AuthManager.triggerGoogleSignIn()" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Sign up with Google
+            </button>
+
+            <p class="modal-switch-text">
+                Already have an account?
+                <a href="#" onclick="AuthManager.switchModal('registerModal','loginModal'); return false;">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         GUEST SAVE MODAL
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="guestSaveModal" style="display:none;" role="dialog" aria-modal="true">
+        <div class="modal-card modal-card-sm">
+            <button class="modal-close-btn" onclick="AuthManager.closeModal('guestSaveModal')" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-header">
+                <div class="modal-icon-circle" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2>Login Required</h2>
+                <p id="guest-save-msg">Please login to view your saved projects.</p>
+            </div>
+            <div class="guest-modal-actions">
+                <button class="modal-submit-btn" onclick="AuthManager.switchModal('guestSaveModal','loginModal')">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
+                </button>
+                <button class="modal-secondary-btn" onclick="AuthManager.switchModal('guestSaveModal','registerModal')">
+                    <i class="fa-solid fa-user-plus"></i> Create Free Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts — ORDER MATTERS: toast → api → auth → page logic -->
+    <script src="toast.js"></script>
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
     <script src="saved.js"></script>
 
 </body>
