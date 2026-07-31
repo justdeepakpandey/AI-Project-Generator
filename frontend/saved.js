@@ -1,3 +1,4 @@
+const API_URL = "https://ai-project-generator-1-7qz8.onrender.com";
 const savedProjects = document.getElementById("savedProjects");
 
 async function loadProjects() {
@@ -14,7 +15,7 @@ async function loadProjects() {
 
     try {
 
-        const response = await fetch("http://localhost:5000/api/projects/all");
+        const response = await fetch(`${API_URL}/api/projects/all`);
 
         const data = await response.json();
 
@@ -120,17 +121,9 @@ async function deleteProject(id) {
 
     try {
 
-        const response = await fetch(
-
-            `http://localhost:5000/api/projects/delete/${id}`,
-
-            {
-
-                method: "DELETE"
-
-            }
-
-        );
+        const response = await fetch(`${API_URL}/api/projects/delete/${id}`, {
+    method: "DELETE"
+});
 
         const data = await response.json();
 
@@ -140,13 +133,16 @@ async function deleteProject(id) {
 
     }
 
-    catch (error) {
+   catch (error) {
+    console.error("Saved Projects Error:", error);
 
-        console.log(error);
-
-        alert("Unable to Delete.");
-
-    }
+    savedProjects.innerHTML = `
+        <div class="placeholder-state" style="grid-column: 1 / -1;">
+            <h3>Server Error</h3>
+            <p>${error.message}</p>
+        </div>
+    `;
+}
 
 }
 
