@@ -11,7 +11,7 @@ const generateProjectIdea = async (language, experience, difficulty, skills) => 
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: model: "gemini-2.0-flash",
             contents: prompt
         });
 
