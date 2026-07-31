@@ -1,39 +1,29 @@
+console.log("geminiService loaded");
 const { GoogleGenAI } = require("@google/genai");
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY
 });
 
-async function generateProjectIdea(language, experience, difficulty, skills) {
+const generateProjectIdea = async (language, experience, difficulty, skills) => {
 
-    const prompt = `
-Generate one software project idea.
+    const prompt = `Your prompt here`;
 
-Programming Language: ${language}
-Experience: ${experience}
-Difficulty: ${difficulty}
-Skills: ${skills}
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt
+        });
 
-Return the response in this format:
+        return response.text;
 
-Project Name:
-Description:
-Features:
-Tech Stack:
-`;
-
-    const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt
-    });
-
-    return response.text;
-
-}
+    } catch (err) {
+        console.error("FULL ERROR:");
+        console.error(err);
+        throw err;
+    }
+};
 
 module.exports = {
     generateProjectIdea
 };
-console.log("Gemini Key:", process.env.GEMINI_API_KEY);
-console.log("Starts with AIza:", process.env.GEMINI_API_KEY?.startsWith("AIza"));
-console.log("Starts with AQ:", process.env.GEMINI_API_KEY?.startsWith("AQ."));
